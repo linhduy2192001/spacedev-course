@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import Field from "../components/Field";
-import { validate, require, regexp } from "../utils/validate";
-import { useForm } from "../hooks/useForm";
+import Field from "../../components/Field";
+import { validate, require, regexp } from "../../utils/validate";
+import { useForm } from "../../hooks/useForm";
+import { useParams } from "react-router";
+import { courseService } from "../../services/course.services";
+import { currency } from "../../utils/currency";
+import { useFetch } from "../../hooks/useFetch";
 
 export default function RegisterPage() {
+  const { id } = useParams();
+  // const [detail, setDetail] = useState(() => {
+  //   return courseService.getDetailCourse(parseInt(id));
+  // });
+  const { data, loading } = useFetch(() => courseService.getDetailCourse(id));
   // let [form, setForm] = useState({});
   // const [error, setError] = useState({});
   const { validate, register, values } = useForm({
@@ -40,6 +49,9 @@ export default function RegisterPage() {
     ],
   });
   const [isSuccess, setIsSucess] = useState(false);
+
+  if (loading) return null;
+  let { data: detail } = data;
 
   const onSubmit = () => {
     // setError(errorObject);
@@ -83,9 +95,9 @@ export default function RegisterPage() {
         <main id="main">
           <section className="register-course">
             <div className="container">
-              <div className="wrap container">
+              <div className="container wrap">
                 <div className="main-sub-title">ĐĂNG KÝ</div>
-                <h1 className="main-title">Thực chiến Reactjs Advanced </h1>
+                <h1 className="main-title">{detail.title} </h1>
                 <div className="main-info">
                   <div className="date">
                     <strong>Khai giảng:</strong> 15/11/2020
@@ -94,7 +106,8 @@ export default function RegisterPage() {
                     <strong>Thời lượng:</strong> 18 buổi
                   </div>
                   <div className="time">
-                    <strong>Học phí:</strong> 6,000,000 VND
+                    <strong>Học phí:</strong>
+                    {currency(detail.money)} VND
                   </div>
                 </div>
                 <div className="form">

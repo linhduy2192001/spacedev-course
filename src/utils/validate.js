@@ -7,6 +7,8 @@ const REGEXP = {
 const ERROR_MESSAGE = {
   required: "Please fill in this field",
   regexp: "Field not like format",
+  minMax: (min, max) => `Xin vui lòng nhập từ ${min} - ${max} ký tự`,
+  confirm: (field) => `Xin vui lòng điền giống ${field}`,
 };
 
 export const validate = (rules, forms) => {
@@ -31,6 +33,20 @@ export const validate = (rules, forms) => {
           errorObject[name] = rule.message || ERROR_MESSAGE.regexp;
         }
       }
+
+      if (rule.min || rule.max) {
+        if (forms[name]?.length < rule.min || forms[name]?.length > rule.max) {
+          errorObject[name] =
+            rule.message || ERROR_MESSAGE.minMax(rule.min, rule.max);
+        }
+      }
+
+      if (rule.confirm) {
+        if (forms[rule.confirm] !== forms[name]) {
+          errorObject[name] =
+            rule.message || ERROR_MESSAGE.confirm(rule.confirm);
+        }
+      }
     }
   }
   return errorObject;
@@ -40,4 +56,10 @@ export const require = (message) => ({ message, required: true });
 export const regexp = (pattern, message) => ({
   regexp: pattern,
   message,
+});
+
+export const minmax = (min, max, message) => ({ min, max, message });
+
+export const confirm = (field) => ({
+  confirm: field,
 });

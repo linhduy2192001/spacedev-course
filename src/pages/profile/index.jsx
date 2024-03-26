@@ -1,4 +1,6 @@
 import React from "react";
+import { Navigate } from "react-router";
+import { PATH } from "../../config/path";
 
 export default function Profile() {
   return (

@@ -1,12 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { PATH } from "../../config/path";
 
-export default function Header() {
+export default function Header({ user, logout }) {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    onCloseMenu();
+  }, [pathname]);
+  const onOpenMenu = () => {
+    document.body.classList.toggle("menu-is-show");
+  };
+
+  const onCloseMenu = () => {
+    document.body.classList.remove("menu-is-show");
+  };
+
+  const _logout = (ev) => {
+    ev.preventDefault();
+    logout();
+  };
   return (
     <>
       <header id="header">
         <div className="wrap">
-          <div className="menu-hambeger">
+          <div className="menu-hambeger " onClick={onOpenMenu}>
             <div className="button">
               <span />
               <span />
@@ -19,26 +37,37 @@ export default function Header() {
             <h1>Spacedev</h1>
           </Link>
           <div className="right">
-            <div className="have-login">
-              <div className="account">
-                <a href="./profile.html" className="info">
-                  <div className="name">Đặng Thuyền Vương</div>
-                  <div className="avatar">
-                    <img src="/img/avt.png" alt="" />
-                  </div>
-                </a>
+            {user ? (
+              <div className="have-login">
+                <div className="account">
+                  <Link to={PATH.profile.index} className="info">
+                    <div className="name">Đặng Thuyền Vương</div>
+                    <div className="avatar">
+                      <img src="/img/avt.png" alt="" />
+                    </div>
+                  </Link>
+                </div>
+                <div className="hamberger"></div>
+                <div className="sub">
+                  <Link to={PATH.profile.course}>Khóa học của tôi</Link>
+                  <Link to={PATH.profile.index}>Thông tin tài khoản</Link>
+                  <a onClick={_logout} href="#">
+                    Đăng xuất
+                  </a>
+                </div>
               </div>
-              <div className="hamberger"></div>
-              <div className="sub">
-                <a href="#">Khóa học của tôi</a>
-                <a href="#">Thông tin tài khoản</a>
-                <a href="#">Đăng xuất</a>
+            ) : (
+              <div class="not-login bg-none">
+                <Link to={PATH.signin} class="btn-register">
+                  Đăng nhập
+                </Link>
+                <Link to={PATH.signup} class="btn main btn-open-login">
+                  Đăng ký
+                </Link>
               </div>
-            </div>
-            {/* <div class="not-login bg-none">
-                    <a href="#" class="btn-register">Đăng nhập</a>
-                    <a href="login.html" class="btn main btn-open-login">Đăng ký</a>
-                </div> */}
+            )}
+
+            {/* */}
           </div>
         </div>
         <div className="progress" />
@@ -57,25 +86,23 @@ export default function Header() {
             </a>
           </li>
           <li>
-            <a className="active" href="./">
-              Trang chủ
-            </a>
+            <NavLink to={PATH.home}>Trang chủ</NavLink>
           </li>
           <li>
-            <a href="./team.html">Spacedev Team</a>
+            <NavLink to={PATH.team}>Spacedev Team</NavLink>
           </li>
           <li>
-            <a href="./course-list.html">Khóa Học</a>
+            <NavLink to={PATH.course}>Khóa Học</NavLink>
           </li>
           <li>
-            <a href="./project.html">Dự Án</a>
+            <NavLink to={PATH.project}>Dự Án</NavLink>
           </li>
           <li>
-            <a href="./contact.html">Liên hệ</a>
+            <NavLink to={PATH.contact}>Liên hệ</NavLink>
           </li>
         </ul>
       </nav>
-      <div className="overlay_nav" />
+      <div className="overlay_nav" onClick={onCloseMenu} />
     </>
   );
 }

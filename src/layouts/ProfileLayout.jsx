@@ -1,7 +1,8 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
+import { PATH } from "../config/path";
 
-export default function ProfileLayout() {
+export default function ProfileLayout({ user }) {
   return (
     <main id="main">
       <div className="profile">
@@ -20,14 +21,14 @@ export default function ProfileLayout() {
           <div className="container">
             <div className="tab">
               <div className="tab-title">
-                <a href="#" className="active">
+                <NavLink end to={PATH.profile.index}>
                   Thông tin tài khoản
-                </a>
-                <a href="#">Khóa học của bạn</a>
-                <a href="#">Dự án đã làm</a>
-                <a href="#">Lịch sử thanh toán</a>
-                <a href="#">Quản lý COIN của tôi</a>
-                <a href="#">Khóa học đã xem</a>
+                </NavLink>
+                <NavLink to={PATH.profile.course}>Khóa học của bạn</NavLink>
+                <NavLink to={PATH.profile.project}>Dự án đã làm</NavLink>
+                <NavLink to={PATH.profile.payment}>Lịch sử thanh toán</NavLink>
+                <NavLink to={PATH.profile.coin}>Quản lý COIN của tôi</NavLink>
+                <NavLink to={PATH.profile.course}>Khóa học đã xem</NavLink>
               </div>
               <div className="tab-content">
                 <Outlet />

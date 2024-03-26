@@ -4,12 +4,18 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { validate, require, regexp } from "../utils/validate";
 import { useForm } from "../hooks/useForm";
+import { organizationSerivce } from "../services/organization.service";
+import { message } from "antd";
+import Button from "../components/Button";
+import { useAsync } from "../hooks/useAsync";
 
 export default function ContactPage() {
   // let [form, setForm] = useState({});
   // const [error, setError] = useState({});
-
-  const { validate, register } = useForm({
+  const [isSuccess, setIsSuccess] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const { excute, loading } = useAsync(organizationSerivce.contact);
+  const { validate, register, values, reset } = useForm({
     name: [require("Xin vui lòng nhập họ và tên")],
     // { required: true, message: "Xin vui lòng nhập họ và tên" },
 
@@ -41,8 +47,20 @@ export default function ContactPage() {
     title: [require()],
     content: [require()],
   });
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
+    try {
+      if (validate()) {
+        const res = await excute(values);
+        if (res.data.success) {
+          reset();
+          message.success("Bạn đã gửi liên hệ thành công!", 1000);
+          setIsSuccess(true);
+        }
+      } else {
+        console.log("Validate error");
+      }
+    } catch (err) {}
     // const errorObject = validate({}, form);
 
     // if (!form.name?.trim()) {
@@ -77,12 +95,6 @@ export default function ContactPage() {
     // }
 
     // setError(errorObject);
-
-    if (validate()) {
-      console.log("Validate success");
-    } else {
-      console.log("Validate error");
-    }
   };
 
   // const register = (name) => {
@@ -97,61 +109,85 @@ export default function ContactPage() {
       <Header />
       <main id="main">
         <div className="register-course">
-          <section className="section-1 wrap container">
-            {/* <div class="main-sub-title">liên hệ</div> */}
-            <h2 className="main-title">HỢP TÁC CÙNG Spacedev</h2>
-            <p className="top-des">
-              Đừng ngần ngại liên hệ với <strong>Spacedev</strong> để cùng nhau
-              tạo ra những sản phẩm giá trị, cũng như việc hợp tác với các đối
-              tác tuyển dụng và công ty trong và ngoài nước.
-            </p>
-            <form className="form" onSubmit={onSubmit}>
-              <Field
-                label="Họ và tên"
-                placeholder="Họ và tên"
-                required
-                {...register("name")}
-              />{" "}
-              <Field
-                label="Số điện thoại"
-                placeholder="Số điện thoại"
-                required
-                {...register("phone")}
-              />
-              <Field
-                label="Email"
-                placeholder="Email"
-                required
-                {...register("email")}
-              />
-              <Field
-                label="Website"
-                placeholder="Website"
-                {...register("website")}
-              />
-              <Field
-                label="Tiêu đề"
-                placeholder="Tiêu đề"
-                required
-                {...register("title")}
-              />
-              <Field
-                label="Nội dung"
-                placeholder="Nội dung"
-                required
-                {...register("content")}
-                renderInput={(props) => (
-                  <textarea
-                    {...props}
-                    name=""
-                    id=""
-                    cols="30"
-                    rows="10"
-                  ></textarea>
-                )}
-              />
-              <button className="btn main rect">đăng ký</button>
-            </form>
+          <section className="container section-1 wrap">
+            {isSuccess ? (
+              <>
+                <h2 className="main-title">Liên hệ thành công</h2>
+                <p className="top-des">
+                  Thông tin liên hệ của bạn đã được gửi, chúng tôi sẽ liên hệ
+                  lại bạn trong thời gian sớm nhất, xin cảm ơn!
+                </p>
+                <div className="flex justify-center">
+                  <a
+                    href="#"
+                    className="mt-10 link"
+                    onClick={(ev) => {
+                      ev.preventDefault();
+                      setIsSuccess(false);
+                    }}
+                  >
+                    Tiếp tục liên hệ
+                  </a>
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <h2 className="main-title"> HỢP TÁC CÙNG Spacedev</h2>
+                <p className="top-des">
+                  Đừng ngần ngại liên hệ với <strong>Spacedev</strong> để cùng
+                  nhau tạo ra những sản phẩm giá trị, cũng như việc hợp tác với
+                  các đối tác tuyển dụng và công ty trong và ngoài nước.
+                </p>
+                <form className="form" onSubmit={onSubmit}>
+                  <Field
+                    label="Họ và tên"
+                    placeholder="Họ và tên"
+                    required
+                    {...register("name")}
+                  />{" "}
+                  <Field
+                    label="Số điện thoại"
+                    placeholder="Số điện thoại"
+                    required
+                    {...register("phone")}
+                  />
+                  <Field
+                    label="Email"
+                    placeholder="Email"
+                    required
+                    {...register("email")}
+                  />
+                  <Field
+                    label="Website"
+                    placeholder="Website"
+                    {...register("website")}
+                  />
+                  <Field
+                    label="Tiêu đề"
+                    placeholder="Tiêu đề"
+                    required
+                    {...register("title")}
+                  />
+                  <Field
+                    label="Nội dung"
+                    placeholder="Nội dung"
+                    required
+                    {...register("content")}
+                    renderInput={(props) => (
+                      <textarea
+                        {...props}
+                        name=""
+                        id=""
+                        cols="30"
+                        rows="10"
+                      ></textarea>
+                    )}
+                  />
+                  <Button loading={loading}>Đăng ký</Button>
+                </form>
+              </>
+            )}
           </section>
           {/* <div class="register-success">
                 <div class="contain">
