@@ -8,16 +8,16 @@ import MyPayment from "../pages/profile/payment";
 import MyProject from "../pages/profile/project";
 import Recent from "../pages/profile/recent";
 
-export const profile = (user) => {
+export const profile = () => {
   return {
-    element: <PrivateRouter user={user} redirect={PATH.signin} />,
+    element: <PrivateRouter redirect={PATH.signin} />,
     children: [
       {
-        element: <ProfileLayout user={user} redirect={PATH.profile.index} />,
+        element: <ProfileLayout redirect={PATH.profile.index} />,
         children: [
           {
             element: <Profile />,
-            index: true,
+            path: PATH.profile.index,
           },
           {
             element: <MyCourse />,

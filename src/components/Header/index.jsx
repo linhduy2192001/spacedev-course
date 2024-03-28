@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { PATH } from "../../config/path";
+import { useAuth } from "../AuthContext";
 
-export default function Header({ user, logout }) {
+export default function Header() {
   const { pathname } = useLocation();
-
+  const { user, logout } = useAuth();
   useEffect(() => {
     onCloseMenu();
   }, [pathname]);
@@ -58,10 +59,10 @@ export default function Header({ user, logout }) {
               </div>
             ) : (
               <div class="not-login bg-none">
-                <Link to={PATH.signin} class="btn-register">
+                <Link to={PATH.signin} className="btn-register">
                   Đăng nhập
                 </Link>
-                <Link to={PATH.signup} class="btn main btn-open-login">
+                <Link to={PATH.signup} className="btn main btn-open-login">
                   Đăng ký
                 </Link>
               </div>

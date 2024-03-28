@@ -2,13 +2,15 @@ import React from "react";
 import { Navigate, useNavigate } from "react-router";
 import { PATH } from "../config/path";
 import { useForm } from "../hooks/useForm";
-import Field from "../components/Field";
 import { confirm, minmax, regexp, require } from "../utils/validate";
+import { useAuth } from "../components/AuthContext";
+import Input from "../components/Input/input";
 
-export default function Signin({ login }) {
+export default function Signin() {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const { values, register, validate, errors } = useForm({
-    name: [require()],
+    // name: [require()],
     password: [require()],
     username: [require(), regexp("email")],
   });
@@ -16,7 +18,7 @@ export default function Signin({ login }) {
   const onSubmit = (ev) => {
     ev.preventDefault();
     if (validate()) {
-      login();
+      login(values);
       navigate(PATH.profile.index);
     }
   };
@@ -26,20 +28,19 @@ export default function Signin({ login }) {
       <div className="auth">
         <div className="wrap">
           {/* login-form */}
-          <form className="ct_login" onSubmit={onSubmit}>
+          <div className="ct_login">
             <h2 className="title">Đăng nhập</h2>
-            <input
-              placeholder="Email / Số điện thoại"
+            <Input
+              className="mb-5"
               {...register("username")}
+              placeholder="Email / Số điện thoại"
             />
-            {errors.username && <p>{errors.username}</p>}
-            <input
+            <Input
+              className="mb-5"
               type="password"
               placeholder="Mật khẩu"
               {...register("password")}
             />
-            {errors.password && <p>{errors.password}</p>}
-
             {/* <input type="text" placeholder="Email / Số điện thoại" />
             <input type="password" placeholder="Mật khẩu" /> */}
             <div className="remember">
@@ -53,14 +54,16 @@ export default function Signin({ login }) {
                 Quên mật khẩu?
               </a>
             </div>
-            <button className="btn rect main btn-login">đăng nhập</button>
+            <button onClick={onSubmit} className="btn rect main btn-login">
+              đăng nhập
+            </button>
             <div className="text-register">
               <span>Nếu bạn chưa có tài khoản?</span>{" "}
               <a className="link" href="./signup.html">
                 Đăng ký
               </a>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </main>
