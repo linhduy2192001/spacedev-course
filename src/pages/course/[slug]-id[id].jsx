@@ -7,6 +7,8 @@ import { currency } from "../../utils/currency";
 import { useFetch } from "../../hooks/useFetch";
 import CourseCards from "../../components/CourseCard";
 import Skeleton from "../../components/Skeleton";
+import { Accordion } from "../../components/Accordion";
+import moment from "moment";
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -19,7 +21,6 @@ export default function CourseDetail() {
     [id]
   );
 
-  console.log("related", related);
   useScrollTop([id]);
 
   // const [detail, setDetail] = useState(() =>
@@ -69,22 +70,25 @@ export default function CourseDetail() {
       <div className="course-detail">
         <section
           className="banner style2"
-          style={{ "--background": "#cde6fb" }}
+          style={{ "--background": detail.template_color_banner }}
         >
           <div className="container">
             <div className="info">
               <h1>{detail.title}</h1>
               <div className="row">
                 <div className="date">
-                  <strong>Khai giảng:</strong> 12/10/2020
+                  <strong>Khai giảng:</strong>{" "}
+                  {moment(detail.opening_time).format("DD/MM/YYYY")}
                 </div>
                 <div className="time">
-                  <strong>Thời lượng:</strong> 18 buổi
+                  <strong>Thời lượng:</strong> {detail.count_video} buổi
                 </div>
               </div>
               <Link
                 className="btn white round"
-                style={{ "--colorBtn": "#70b6f1" }}
+                style={{
+                  "--colorBtn": detail.template_color_btn || "#70b6f1",
+                }}
                 to={registerPath}
               >
                 đăng ký
@@ -111,94 +115,29 @@ export default function CourseDetail() {
               <img src="/img/course-detail-img.png" alt="" />
             </div>
             <h3 className="title">nội dung khóa học</h3>
-            <div className="accordion">
-              <div className="accordion__title">
-                <div className="date">Ngày 1</div>
-                <h3>Giới thiệu HTML, SEO, BEM.</h3>
-              </div>
-              <div className="content">
-                I'd like to demonstrate a powerful little pattern called
-                “Server-Fetched Partials” that offers some tangible benefits
-                over alternatives like VueJS for simple page interactions.
-              </div>
-            </div>
-            <div className="accordion">
-              <div className="accordion__title">
-                <div className="date">Ngày 2</div>
-                <h3>CSS, CSS3, Flexbox, Grid</h3>
-              </div>
-              <div className="content">
-                I'd like to demonstrate a powerful little pattern called
-                “Server-Fetched Partials” that offers some tangible benefits
-                over alternatives like VueJS for simple page interactions.
-              </div>
-            </div>
-            <div className="accordion">
-              <div className="accordion__title">
-                <div className="date">Ngày 3</div>
-                <h3>Media Queries</h3>
-              </div>
-              <div className="content">
-                I'd like to demonstrate a powerful little pattern called
-                “Server-Fetched Partials” that offers some tangible benefits
-                over alternatives like VueJS for simple page interactions.
-              </div>
-            </div>
-            <div className="accordion">
-              <div className="accordion__title">
-                <div className="date">Ngày 4</div>
-                <h3>Boostrap 4</h3>
-              </div>
-              <div className="content">
-                I'd like to demonstrate a powerful little pattern called
-                “Server-Fetched Partials” that offers some tangible benefits
-                over alternatives like VueJS for simple page interactions.
-              </div>
-            </div>
-            <div className="accordion">
-              <div className="accordion__title">
-                <div className="date">Ngày 5</div>
-                <h3>Thực hành dự án website Landing Page</h3>
-              </div>
-              <div className="content">
-                I'd like to demonstrate a powerful little pattern called
-                “Server-Fetched Partials” that offers some tangible benefits
-                over alternatives like VueJS for simple page interactions.
-              </div>
-            </div>
-            <div className="accordion">
-              <div className="accordion__title">
-                <div className="date">Ngày 6</div>
-                <h3>Cài đặt Grunt và cấu trúc thư mục dự án</h3>
-              </div>
-              <div className="content">
-                I'd like to demonstrate a powerful little pattern called
-                “Server-Fetched Partials” that offers some tangible benefits
-                over alternatives like VueJS for simple page interactions.
-              </div>
-            </div>
+            <Accordion.Group>
+              {detail.content.map((e, i) => (
+                <Accordion date={i + 1} {...e}>
+                  {e.content}
+                </Accordion>
+              ))}
+            </Accordion.Group>
+
             <h3 className="title">yêu cầu cần có</h3>
             <div className="row row-check">
-              <div className="col-md-6">Đã từng học qua HTML, CSS</div>
-              <div className="col-md-6">
-                Cài đặt phần mềm Photoshop, Adobe illustrator, Skype
-              </div>
+              {detail.required.map((e, i) => (
+                <div key={i} className="col-md-6">
+                  {e.content}
+                </div>
+              ))}
             </div>
             <h3 className="title">hình thức học</h3>
             <div className="row row-check">
-              <div className="col-md-6">
-                Học offline tại văn phòng, cùng Vương Đặng và 3 đồng nghiệp.
-              </div>
-              <div className="col-md-6">
-                Dạy và thực hành thêm bài tập online thông qua Skype.
-              </div>
-              <div className="col-md-6">
-                Được các mentor và các bạn trong team Spacedev hổ trợ thông qua
-                group Spacedev Facebook hoặc phần mềm điều khiển máy tính.
-              </div>
-              <div className="col-md-6">
-                Thực hành 2 dự án thực tế với sự hướng dẫn của Spacedev Team.
-              </div>
+              {detail.content.map((e, i) => (
+                <div key={i} className="col-md-6">
+                  {e.title}
+                </div>
+              ))}
             </div>
             <h3 className="title">
               <div className="date-start">lịch học</div>
@@ -208,11 +147,39 @@ export default function CourseDetail() {
               </div>
             </h3>
             <p>
-              <strong>Ngày bắt đầu: </strong> 09/09/2020 <br />
-              <strong>Thời gian học: </strong> Thứ 3 từ 18h45-21h45, Thứ 7 từ
-              12h-15h, Chủ nhật từ 15h-18h
+              <strong>Ngày bắt đầu: </strong>{" "}
+              {moment(detail.opening_time).format("DD/MM/YYYY")} <br />
+              <strong>Thời gian học: </strong> {detail.schedule}
             </p>
             <h3 className="title">Người dạy</h3>
+            <div className="teaches">
+              <div className="teacher">
+                <div className="avatar">
+                  <img src="/img/avt.png" alt="" />
+                </div>
+                <div className="info">
+                  <div className="name">Đặng Thuyền Vương</div>
+                  <div className="title">
+                    Founder Spacedev &amp; Fullstack developer
+                  </div>
+                  <p className="intro">
+                    My education, career, and even personal life have been
+                    molded by one simple principle; well designed information
+                    resonates with people and can change lives.I have a passion
+                    for making information resonate. It all starts with how
+                    people think. With how humans work. As humans we have
+                    learned how to read and write and while that is incredible,
+                    we are also already hard-wired to do some things a bit more
+                    "automatically"
+                  </p>
+                  <p>
+                    <strong>Website:</strong>{" "}
+                    <a href="#">https://dangthuyenvuong.github.io/</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <h3 className="title">Người hướng dẫn</h3>
             <div className="teaches">
               <div className="teacher">
                 <div className="avatar">

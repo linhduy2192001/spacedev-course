@@ -5,9 +5,12 @@ import { useForm } from "../hooks/useForm";
 import { confirm, minmax, regexp, require } from "../utils/validate";
 import { useAuth } from "../components/AuthContext";
 import Input from "../components/Input/input";
+import { useAsync } from "../hooks/useAsync";
+import Button from "../components/Button";
 
 export default function Signin() {
   const { login } = useAuth();
+  const { loading, excute: loginService } = useAsync(login);
   const navigate = useNavigate();
   const { values, register, validate, errors } = useForm({
     // name: [require()],
@@ -18,7 +21,7 @@ export default function Signin() {
   const onSubmit = (ev) => {
     ev.preventDefault();
     if (validate()) {
-      login(values);
+      loginService(values);
       navigate(PATH.profile.index);
     }
   };
@@ -54,9 +57,9 @@ export default function Signin() {
                 Quên mật khẩu?
               </a>
             </div>
-            <button onClick={onSubmit} className="btn rect main btn-login">
+            <Button onClick={onSubmit} className="btn rect main btn-login">
               đăng nhập
-            </button>
+            </Button>
             <div className="text-register">
               <span>Nếu bạn chưa có tài khoản?</span>{" "}
               <a className="link" href="./signup.html">

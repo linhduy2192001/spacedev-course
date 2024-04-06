@@ -11,6 +11,7 @@ import ContactPage from "../pages/contact";
 import Course from "../pages/course";
 import CourseDetail from "../pages/course/[slug]-id[id]";
 import Demo from "../pages/demo";
+import DemoReact from "../pages/demo-react";
 import FAQ from "../pages/faq";
 import Payment from "../pages/payment";
 import Profile from "../pages/profile";
@@ -36,8 +37,8 @@ export const routers = [
         index: true,
       },
       {
-        element: <Demo />,
-        path: "/demo",
+        element: <DemoReact />,
+        path: "/demo-react",
       },
       {
         element: <ContactPage />,

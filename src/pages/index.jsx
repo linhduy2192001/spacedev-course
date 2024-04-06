@@ -3,8 +3,11 @@ import { useScrollTop } from "../hooks/useScrollTop";
 import ListCourse from "../components/ListCourse";
 import { courseService } from "../services/course.services";
 import { useFetch } from "../hooks/useFetch";
+import VideoModal from "../components/VideoModal";
+import Modal from "../components/Modal";
 
 export default function Home() {
+  const [isOpenModal, setIsOpenModal] = useState(false);
   // const [loading, setLoading] = useState(true);
   // const [courses, setCourses] = useState([]);
   // useScrollTop();
@@ -88,10 +91,30 @@ export default function Home() {
                     src="https://svtech.com.vn/wp-content/uploads/2020/07/dexus-office-space.jpg"
                     alt=""
                   />
-                  <div className="play-btn btn-video-intro">
+                  <div
+                    className="play-btn btn-video-intro"
+                    onClick={() => setIsOpenModal(true)}
+                  >
                     <img src="img/play-icon.svg" alt="" />
                   </div>
                 </div>
+                <Modal
+                  mashClosable
+                  visible={isOpenModal}
+                  onCancel={() => setIsOpenModal(false)}
+                >
+                  {" "}
+                  <iframe
+                    width="800px"
+                    height="450px"
+                    src="https://www.youtube.com/embed/UVa71QARdyw?si=uUNsgBscO7UI65Al"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                  ></iframe>
+                </Modal>
                 <div className="item" style={{ marginTop: "35px" }}>
                   <h4>Sáng tạo và đơn giản</h4>
                   <p>
