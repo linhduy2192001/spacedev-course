@@ -149,19 +149,19 @@ const courses = [
 
 export const courseService = {
   getCourse: (query = "") => {
-    return api.get(`${COURSE_API}/courses${query}`);
+    return api.get(`${COURSE_API}${query}`);
   },
   getDetailCourse(id) {
     // return courses.find((e) => e.id === id);
-    return api.get(`${COURSE_API}/courses/${id}`);
+    return api.get(`${COURSE_API}/${id}`);
   },
   getRelativeCourse(id) {
-    return api.get(`${COURSE_API}/courses/related/${id}`);
+    return api.get(`${COURSE_API}/related/${id}`);
   },
   register(id, data) {
-    return api.post(`${COURSE_API}/courses/register/${id}`, data);
+    return api.post(`${COURSE_API}/register/${id}`, data);
   },
   getMyCourse() {
-    return api.get(`${COURSE_API}/courses/my-course`);
+    return api.get(`${COURSE_API}/my-course`);
   },
 };
