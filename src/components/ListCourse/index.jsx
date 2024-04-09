@@ -41,7 +41,7 @@ export default function ListCourse() {
         <div className="list row">
           {loading
             ? Array.from(Array(6)).map((_, i) => <CourseCardLoading key={i} />)
-            : courses.data.map((e) => <CourseCards key={e.id} {...e} />)}
+            : courses?.data.map((e) => <CourseCards key={e.id} {...e} />)}
         </div>
         <div className="flex justify-center">
           <a href="./course-list.html" className="btn main">
