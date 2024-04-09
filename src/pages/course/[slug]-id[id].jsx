@@ -7,10 +7,15 @@ import { currency } from "../../utils/currency";
 import { useFetch } from "../../hooks/useFetch";
 import CourseCards from "../../components/CourseCard";
 import Skeleton from "../../components/Skeleton";
+import Page404 from "../404";
 import { Accordion } from "../../components/Accordion";
 import moment from "moment";
+import Teacher from "../../components/Teacher";
+import { Modal } from "antd";
+import VideoModal from "../../components/VideoModal";
 
 export default function CourseDetail() {
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const { id } = useParams();
   const { data, loading } = useFetch(
     () => courseService.getDetailCourse(id),
@@ -58,12 +63,14 @@ export default function CourseDetail() {
 
   const { data: detail } = data;
 
-  if (!detail) return <div style={{ margin: "100px 0" }}>...Not Found...</div>;
+  if (!detail) return <Page404 />;
 
   const registerPath = generatePath(PATH.courseRegister, {
     slug: detail.slug,
     id: detail.id,
   });
+
+  const openingTime = moment(detail.opening_time).format("DD/MM/YYYY");
 
   return (
     <main id="main">
@@ -77,8 +84,7 @@ export default function CourseDetail() {
               <h1>{detail.title}</h1>
               <div className="row">
                 <div className="date">
-                  <strong>Khai giảng:</strong>{" "}
-                  {moment(detail.opening_time).format("DD/MM/YYYY")}
+                  <strong>Khai giảng:</strong> {openingTime}
                 </div>
                 <div className="time">
                   <strong>Thời lượng:</strong> {detail.count_video} buổi
@@ -97,7 +103,7 @@ export default function CourseDetail() {
           </div>
           <div className="bottom">
             <div className="container">
-              <div className="video">
+              <div className="video" onClick={() => setIsOpenModal(true)}>
                 <div className="icon">
                   <img src="/img/play-icon-white.png" alt="" />
                 </div>{" "}
@@ -106,6 +112,21 @@ export default function CourseDetail() {
               <div className="money">{currency(detail.money)} VND</div>
             </div>
           </div>
+          <VideoModal
+            visible={isOpenModal}
+            onCancel={() => setIsOpenModal(false)}
+          >
+            <iframe
+              width="800px"
+              height="450px"
+              src="https://www.youtube.com/embed/UVa71QARdyw?si=uUNsgBscO7UI65Al"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </VideoModal>
         </section>
         <section className="section-2">
           <div className="container">
@@ -147,71 +168,31 @@ export default function CourseDetail() {
               </div>
             </h3>
             <p>
-              <strong>Ngày bắt đầu: </strong>{" "}
-              {moment(detail.opening_time).format("DD/MM/YYYY")} <br />
+              <strong>Ngày bắt đầu: </strong> {openingTime} <br />
               <strong>Thời gian học: </strong> {detail.schedule}
             </p>
             <h3 className="title">Người dạy</h3>
             <div className="teaches">
-              <div className="teacher">
-                <div className="avatar">
-                  <img src="/img/avt.png" alt="" />
-                </div>
-                <div className="info">
-                  <div className="name">Đặng Thuyền Vương</div>
-                  <div className="title">
-                    Founder Spacedev &amp; Fullstack developer
-                  </div>
-                  <p className="intro">
-                    My education, career, and even personal life have been
-                    molded by one simple principle; well designed information
-                    resonates with people and can change lives.I have a passion
-                    for making information resonate. It all starts with how
-                    people think. With how humans work. As humans we have
-                    learned how to read and write and while that is incredible,
-                    we are also already hard-wired to do some things a bit more
-                    "automatically"
-                  </p>
-                  <p>
-                    <strong>Website:</strong>{" "}
-                    <a href="#">https://dangthuyenvuong.github.io/</a>
-                  </p>
-                </div>
-              </div>
+              <Teacher {...detail.teacher} />
             </div>
-            <h3 className="title">Người hướng dẫn</h3>
-            <div className="teaches">
-              <div className="teacher">
-                <div className="avatar">
-                  <img src="/img/avt.png" alt="" />
+            {detail.mentor.length > 0 && (
+              <>
+                <h3 className="title">Người hướng dẫn</h3>
+                <div className="teaches">
+                  {detail.mentor.map((e) => (
+                    <Teacher key={e.id} {...e} />
+                  ))}
                 </div>
-                <div className="info">
-                  <div className="name">Đặng Thuyền Vương</div>
-                  <div className="title">
-                    Founder Spacedev &amp; Fullstack developer
-                  </div>
-                  <p className="intro">
-                    My education, career, and even personal life have been
-                    molded by one simple principle; well designed information
-                    resonates with people and can change lives.I have a passion
-                    for making information resonate. It all starts with how
-                    people think. With how humans work. As humans we have
-                    learned how to read and write and while that is incredible,
-                    we are also already hard-wired to do some things a bit more
-                    "automatically"
-                  </p>
-                  <p>
-                    <strong>Website:</strong>{" "}
-                    <a href="#">https://dangthuyenvuong.github.io/</a>
-                  </p>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
+
             <div className="bottom">
               <div className="user">
                 <img src="/img/user-group-icon.png" alt="" /> 12 bạn đã đăng ký
               </div>
-              <div className="btn main btn-register round">đăng ký</div>
+              <Link className="btn main btn-register round" to={registerPath}>
+                đăng ký
+              </Link>
               <div className="btn-share btn overlay round btn-icon">
                 <img src="/img/facebook.svg" alt="" />
               </div>

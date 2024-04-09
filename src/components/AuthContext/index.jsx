@@ -10,7 +10,7 @@ import {
   setUser,
 } from "../../utils/token";
 import { userService } from "../../services/user.services";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../config/path";
 
 const AuthContext = createContext({});
@@ -19,6 +19,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, _setUser] = useState(getUser);
+  const { state } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,7 +45,11 @@ export const AuthProvider = ({ children }) => {
     const user = await userService.getProfile();
     _setUser(user.data);
     message.success("Đăng nhập tài khoản thành công!");
-    navigate(PATH.profile.index);
+    if (state?.redirect) {
+      navigate(state.redirect);
+    } else {
+      navigate(PATH.profile.index);
+    }
   };
 
   const logout = () => {
