@@ -29,7 +29,7 @@ export default function ListCourse() {
     <section className="section-1">
       <div className="container">
         <h2 className="main-title">KHÓA HỌC SPACEDEV</h2>
-        <p className="top-des">
+        <p className="top-des mt-15">
           Cho dù bạn muốn tìm kiếm công việc, khởi nghiệp, phát triển hoạt động
           kinh doanh hay chỉ đơn giản là muốn khám phá thế giới, hãy chọn lộ
           trình học tập mà bạn muốn và bắt đầu câu chuyện thành công của bạn.
