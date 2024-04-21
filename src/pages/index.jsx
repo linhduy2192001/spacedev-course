@@ -7,6 +7,7 @@ import VideoModal from "../components/VideoModal";
 import Modal from "../components/Modal";
 import Testimonial from "../components/Testimonial";
 import Gallery from "../components/Gallery";
+import Slider from "../components/Slider";
 
 export default function Home() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -29,57 +30,7 @@ export default function Home() {
   return (
     <main id="main">
       <div className="homepage">
-        <div className="slider">
-          <div className="item">
-            <div className="container">
-              <div className="content">
-                <h2 className="title">
-                  Điều quan trọng không phải là{" "}
-                  <span style={{ color: "rgb(229, 57, 53)" }}>vị trí đứng</span>{" "}
-                  mà là{" "}
-                  <span style={{ color: "rgb(63, 81, 181)" }}>hướng đi</span>
-                </h2>
-                <a
-                  href="https://spacedev.vn/roadmap"
-                  className="btn main round"
-                >
-                  Roadmap
-                </a>
-              </div>
-            </div>
-            <div className="jarallax-img">
-              <img src="/img/banner1.jpg" alt="" />
-            </div>
-          </div>
-          <div className="item">
-            <div className="container">
-              <div className="content">
-                <h2 className="title">Kiến thức</h2>
-                <h2 className="title">mở ra trang mới cuộc đời bạn</h2>
-                <a href="https://spacedev.vn" className="btn main round">
-                  KHÓA HỌC
-                </a>
-              </div>
-            </div>
-            <div className="jarallax-img">
-              <img src="/img/banner2.jpg" alt="" />
-            </div>
-          </div>
-          <div className="item">
-            <div className="container">
-              <div className="content">
-                <h2 className="title">Chuyên nghiệp</h2>
-                <h2 className="title">làm cho bạn khác biệt</h2>
-                <a href="https://spacedev.vn/about" className="btn main round">
-                  KHÓA HỌC
-                </a>
-              </div>
-            </div>
-            <div className="jarallax-img">
-              <img src="/img/banner3.jpg" alt="" />
-            </div>
-          </div>
-        </div>
+        <Slider />
         <ListCourse />
         <section className="section-different">
           <div className="container">
