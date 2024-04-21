@@ -79,16 +79,21 @@ export default function Header() {
       </header>
       <nav className="nav">
         <ul>
+          {!user && (
+            <li>
+              <Link to={PATH.signin}>Đăng ký / Đăng nhập</Link>
+            </li>
+          )}
           <li>
-            <a href="./signin.html">Đăng ký / Đăng nhập</a>
-          </li>
-          <li>
-            <a href="./profile.html" className="account">
-              <div className="avatar">
-                <img src="/img/avt.png" alt="" />
-              </div>
-              <div className="name">Đặng Thuyền Vương</div>
-            </a>
+            {user && (
+              <Link to={PATH.profile.index} className="account">
+                <div className="avatar">
+                  <img src={user.avatar} alt="" />
+                </div>
+
+                <div className="name">{user.name}</div>
+              </Link>
+            )}
           </li>
           <li>
             <NavLink to={PATH.home}>Trang chủ</NavLink>

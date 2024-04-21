@@ -4,6 +4,8 @@ import CourseCards, { CourseCardLoading } from "../CourseCard";
 import { useScrollTop } from "../../hooks/useScrollTop";
 import Skeleton from "../Skeleton";
 import { useFetch } from "../../hooks/useFetch";
+import { Link } from "react-router-dom";
+import { PATH } from "../../config/path";
 
 export default function ListCourse() {
   const { data: courses, loading } = useFetch(() =>
@@ -44,9 +46,9 @@ export default function ListCourse() {
             : courses?.data.map((e) => <CourseCards key={e.id} {...e} />)}
         </div>
         <div className="flex justify-center">
-          <a href="./course-list.html" className="btn main">
+          <Link to={PATH.course} className="btn main">
             Tất cả khóa học
-          </a>
+          </Link>
         </div>
       </div>
     </section>
